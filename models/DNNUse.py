@@ -64,9 +64,9 @@ class DNN(t.nn.Module):
     def __init__(self):
         super(DNN, self).__init__()
         # 用模拟的数据试试
-        sam_list, X_list, y_list = loadDataVec('train')
-        '''X_list = [[1.0, 2.0], [1.0, 1.0], [1.0, 0.0], [1.0, 0.0], [0.0, 0.0]]
-        y_list = [1, 1, 1, 1, 0]'''
+        # sam_list, X_list, y_list = loadDataVec('train')
+        X_list = [[1.0, 2.0], [1.0, 1.0], [1.0, 0.0], [1.0, 0.0], [0.0, 0.0]]
+        y_list = [1, 1, 1, 1, 0]
         
         X_np = np.asarray(X_list)
         y_np = np.asarray(y_list)
@@ -74,9 +74,9 @@ class DNN(t.nn.Module):
         y_tensor = t.from_numpy(y_np)
         train_data = Data.TensorDataset(X_tensor, y_tensor)
         
-        testSam_list, X_test, y_test = loadDataVec('test')
-        '''X_test = [[1.0, 2.0], [1.0, 1.0], [1.0, 0.0], [1.0, 0.0], [0.0, 0.0]]
-        y_test = [1, 1, 1, 1, 0]'''
+        # testSam_list, X_test, y_test = loadDataVec('test')
+        X_test = [[1.0, 2.0], [1.0, 1.0], [1.0, 0.0], [1.0, 0.0], [0.0, 0.0]]
+        y_test = [1, 1, 1, 1, 0]
         
         Xt_np = np.asarray(X_test)
         yt_np = np.asarray(y_test)
@@ -112,7 +112,7 @@ class DNN(t.nn.Module):
             shuffle=True) 
 
         self.dnn = t.nn.Sequential(
-            t.nn.Linear(6096, 512),
+            t.nn.Linear(2, 512),
             t.nn.Dropout(0.5),
             t.nn.ELU(),
             t.nn.Linear(512, 128),
@@ -127,7 +127,7 @@ class DNN(t.nn.Module):
 
     def forward(self, x):
 
-        nn1 = x.view(-1, 6096)
+        nn1 = x.view(-1, 2)
         # print(nn1.shape)
         out = self.dnn(nn1)
         # print(out.shape)
