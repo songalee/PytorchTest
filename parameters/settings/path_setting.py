@@ -38,7 +38,6 @@ class ProPath():
     # 数据集生成的向量表示
     split_id_dirpath = split_dirpath + split_id + '\\'
     
-    
     '''项目相关路径'''
     pro_dirpath = 'D:\\lisong\\ProgramFiles\\eclipse\\workspace\\PytorchTest\\'
     # pro_dirpath = 'D:\\lisong\\ProgramFiles\\eclipse\\workspace\\AdversarialExamAttack\\'
@@ -50,5 +49,10 @@ class ProPath():
     family_list_dictpath = pro_dirpath + 'parameters\\drebin\\family_list_dict.npy'
     
     '''生成模型存放的路径'''
-    modelpath = split_id_dirpath+'models\\'
+    modelpath = split_id_dirpath + 'models\\'
+    
+    # 从android官网获取的对应关系
+    parse_relation_path = pro_dirpath + 'constants\\code_dictlib\\api_dictlibs\\all'
+    
+    api_perlist_dict1path = pro_dirpath + 'constants\\code_dictlib\\api_dictlibs\\api_perlist_dict1.npy'
 
