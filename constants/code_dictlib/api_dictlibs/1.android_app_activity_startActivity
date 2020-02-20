@@ -1,0 +1,29 @@
+# android/app/Activity;->startActivity
+
+# global parameter: objectname(context)
+
+# virtual methods
+.method public static startActivity(Landroid/app/Activity;Ljava/lang/Class;)V
+    .locals 1
+    .param p0, "activity"    # Landroid/app/Activity;
+    .annotation system Ldalvik/annotation/Signature;
+        value = {
+            "(",
+            "Landroid/app/Activity;",
+            "Ljava/lang/Class",
+            "<*>;)V"
+        }
+    .end annotation
+
+    .prologue
+
+    .local p1, "cls":Ljava/lang/Class;, "Ljava/lang/Class<*>;"
+    new-instance v0, Landroid/content/Intent;
+
+    invoke-direct {v0, p0, p1}, Landroid/content/Intent;-><init>(Landroid/content/Context;Ljava/lang/Class;)V
+
+    .local v0, "intent":Landroid/content/Intent;
+    invoke-virtual {p0, v0}, Landroid/app/Activity;->startActivity(Landroid/content/Intent;)V
+
+    return-void
+.end method

@@ -1,0 +1,26 @@
+# android/telephony/TelephonyManager;->getDeviceId
+# global parameter: objectname(context)
+# permission: 
+<uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+
+.method public getDeviceId1()Ljava/lang/String;
+    .locals 3
+
+    .prologue
+    
+    const-string v2, "phone"
+
+    invoke-virtual {p0, v2}, Lcom/example/android_app_activity_startactivity/HomeActivity;->getSystemService(Ljava/lang/String;)Ljava/lang/Object;
+
+    move-result-object v1
+
+    check-cast v1, Landroid/telephony/TelephonyManager;
+
+    .local v1, "tm":Landroid/telephony/TelephonyManager;
+    invoke-virtual {v1}, Landroid/telephony/TelephonyManager;->getDeviceId()Ljava/lang/String;
+
+    move-result-object v0
+
+    .local v0, "DEVICE_ID":Ljava/lang/String;
+    return-object v0
+.end method

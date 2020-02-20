@@ -1,0 +1,10 @@
+# android/net/wifi/WifiManager;->setWifiEnabled
+
+# permission:
+<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+<uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+<uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
+<uses-feature android:name="android.hardware.wifi" />
+
+# url: https://www.codota.com/code/java/methods/android.net.wifi.WifiManager/setWifiEnabled
+https://developer.android.com/reference/android/net/wifi/package-summary

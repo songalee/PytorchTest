@@ -1,0 +1,7 @@
+# android/net/ConnectivityManager;->getActiveNetworkInfo
+# 
+# permission: 
+<uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+# url: https://developer.android.com/training/basics/network-ops/managing

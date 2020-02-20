@@ -1,0 +1,5 @@
+# android/location/LocationManager;->getLastKnownLocation
+# 
+# permission: 
+<uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+

@@ -1,0 +1,5 @@
+# java/net/HttpURLConnection
+# global parameter: objectname(context)
+# permission: 
+<uses-permission android:name="android.permission.INTERNET"/>
+
