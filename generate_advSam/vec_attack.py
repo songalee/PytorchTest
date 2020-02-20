@@ -13,6 +13,7 @@ import random
 import numpy as np
 import torch
 from models.DNNModelTest import loadModel
+from models.DNNUse import DNN
 
 
 split_dirpath = ProPath.split_dirpath
@@ -127,14 +128,14 @@ def main():
         
         while(True):
             print('Seeding--------------------------------------')
-            feature_seedlist = genEditFeaSeedList(300)
+            feature_seedlist = genEditFeaSeedList(100)
             newvec_list = changeVec(line_clips, feature_seedlist)
             print('features:' + str(feature_seedlist))
             
             #预测样本的恶意与否
             newvec_np = np.asarray([newvec_list])
             newvec_tensor = torch.from_numpy(newvec_np)
-            t_out = DNN_model(newvec_tensor)
+            t_out = DNN_model(newvec_tensor.float())
             print('predict:' + str(np.argmax(t_out.data.numpy(), axis=1)))
 
 
