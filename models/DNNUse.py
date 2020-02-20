@@ -22,11 +22,12 @@ N_TEST_IMG = 10  # 到时候显示 5张图片看效果, 如上图一
 
 flag_folder = 'train'
 split_id_dirpath = ProPath.split_id_dirpath
+modelpath = ProPath.modelpath
 
 
 def loadDataVec(data_flag):
     
-    flagvec_dirpath = split_id_dirpath + '\\' + data_flag + '\\'
+    flagvec_dirpath = split_id_dirpath + data_flag + '\\'
     X_list = []
     y_list = []
     # 存放样本名的列表
@@ -64,9 +65,9 @@ class DNN(t.nn.Module):
     def __init__(self):
         super(DNN, self).__init__()
         # 用模拟的数据试试
-        # sam_list, X_list, y_list = loadDataVec('train')
-        X_list = [[1.0, 2.0], [1.0, 1.0], [1.0, 0.0], [1.0, 0.0], [0.0, 0.0]]
-        y_list = [1, 1, 1, 1, 0]
+        sam_list, X_list, y_list = loadDataVec('train')
+        # X_list = [[1.0, 2.0], [1.0, 1.0], [1.0, 0.0], [1.0, 0.0], [0.0, 0.0]]
+        # y_list = [1, 1, 1, 1, 0]
         
         X_np = np.asarray(X_list)
         y_np = np.asarray(y_list)
@@ -74,9 +75,9 @@ class DNN(t.nn.Module):
         y_tensor = t.from_numpy(y_np)
         train_data = Data.TensorDataset(X_tensor, y_tensor)
         
-        # testSam_list, X_test, y_test = loadDataVec('test')
-        X_test = [[1.0, 2.0], [1.0, 1.0], [1.0, 0.0], [1.0, 0.0], [0.0, 0.0]]
-        y_test = [1, 1, 1, 1, 0]
+        testSam_list, X_test, y_test = loadDataVec('test')
+        # X_test = [[1.0, 2.0], [1.0, 1.0], [1.0, 0.0], [1.0, 0.0], [0.0, 0.0]]
+        # y_test = [1, 1, 1, 1, 0]
         
         Xt_np = np.asarray(X_test)
         yt_np = np.asarray(y_test)
@@ -112,7 +113,7 @@ class DNN(t.nn.Module):
             shuffle=True) 
 
         self.dnn = t.nn.Sequential(
-            t.nn.Linear(2, 512),
+            t.nn.Linear(6096, 512),
             t.nn.Dropout(0.5),
             t.nn.ELU(),
             t.nn.Linear(512, 128),
@@ -127,7 +128,7 @@ class DNN(t.nn.Module):
 
     def forward(self, x):
 
-        nn1 = x.view(-1, 2)
+        nn1 = x.view(-1, 6096)
         # print(nn1.shape)
         out = self.dnn(nn1)
         # print(out.shape)
@@ -163,7 +164,7 @@ def train():
             opt.zero_grad()
             losses.backward()
             opt.step()
-            if(step % 1 == 0):
+            if(step % 100 == 0):
                 if(use_gpu):
                     print(e, step, losses.data.cpu().numpy())
                 else:
@@ -186,8 +187,8 @@ def train():
                     ts = time.time()
                     break  # 只测试前1000个
 
-    t.save(model, './model.pkl')  # 保存整个网络
-    t.save(model.state_dict(), './model_params.pkl')  # 只保存网络中的参数 (速度快, 占内存少)
+    t.save(model, modelpath + 'DNN_model.pkl')  # 保存整个网络
+    t.save(model.state_dict(), modelpath + 'DNN_model_params.pkl')  # 只保存网络中的参数 (速度快, 占内存少)
 
 
 if __name__ == "__main__":

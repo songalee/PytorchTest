@@ -19,6 +19,7 @@ import pickle
 
 split_id = ProPath.split_id
 split_dirpath = ProPath.split_dirpath
+modelpath = ProPath.modelpath
 
 
 def loadModel(modelpath):
@@ -35,13 +36,13 @@ def loadDataLoader():
     test_data = Data.TensorDataset(Xt_tensor, yt_tensor)
     testloader = torch.utils.data.DataLoader(
             dataset=test_data,
-            batch_size=1000,
+            batch_size=50000,
             shuffle=True)
     return testSam_list, testloader
 
 
 def DNNTest():
-    dnn_model = loadModel('./model.pkl')
+    dnn_model = loadModel(modelpath + 'DNN_model.pkl')
     testSam_list, testloader = loadDataLoader()
     
     # 被预测为恶意样本，也确实为恶意样本的列表
@@ -55,7 +56,7 @@ def DNNTest():
         t_out = dnn_model(t_x.float())
         acc = (np.argmax(t_out.data.numpy(), axis=1) == t_y.data.numpy())
         
-        print('acc:' + acc)
+        print('acc:' + str(acc))
         
         y_true = t_y.data.numpy()
         y_pred = np.argmax(t_out.data.numpy(), axis=1)
@@ -93,8 +94,9 @@ def DNNTest():
         print(metrics.roc_auc_score(y_true, y_pred))
         print("---------risk assessment distribution------------------")
 
+
 def getTestPMalVec():
-    #testpmal_vec:是mal且被DNN模型判定为mal的样本的向量。
+    # testpmal_vec:是mal且被DNN模型判定为mal的样本的向量。
     testpmal_vecpath = split_dirpath + split_id + '\\test\\DNN_pmal'
     testmal_vecpath = split_dirpath + split_id + '\\test\\mal'
     true_maldictpath = split_dirpath + split_id + '\\DNN_true_maldict.npy'
@@ -115,6 +117,4 @@ def getTestPMalVec():
 if __name__ == '__main__':
     DNNTest()
     getTestPMalVec()
-    
-    
     
