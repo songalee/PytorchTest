@@ -119,24 +119,82 @@ def genEditFeaSeedList(seed_num):
 def main():
     DNN_model = loadModel(modelpath + 'DNN_model.pkl')
     testpmal_vecpath = split_dirpath + split_id + '\\test\\DNN_pmal'
-    with open(testpmal_vecpath, 'r') as testpmal_vecfile:
-        line = testpmal_vecfile.readline()
-        line_clips = line.split(' ')
-        mal = line_clips[0]
-        line_clips = line_clips[1:len(line_clips) - 1]
-        line_clips = list(map(int, line_clips))
+    attack_resultpath = split_dirpath + split_id + '\\test\\DNN_attack_result'
+    # setting
+    mutant_size = 300  # 变种向量的数量
+    mutant_times = 1000  # 变种的次数
+    # 样本个数的限制
+    sIndex_size = 3
+    
+    with open(attack_resultpath, 'w') as attack_resultfile:
+        attack_resultfile.write('##############Settings##################\n')
+        attack_resultfile.write('##mutant_size:' + str(mutant_size) + '\n')
+        attack_resultfile.write('##mutant_times:' + str(mutant_times) + '\n')
+        attack_resultfile.write('##sIndex_size:' + str(sIndex_size) + '\n')
+        attack_resultfile.write('##############Settings##################\n')
+        # 样本的个数。
+        sIndex_count = 0
         
-        while(True):
-            print('Seeding--------------------------------------')
-            feature_seedlist = genEditFeaSeedList(100)
-            newvec_list = changeVec(line_clips, feature_seedlist)
-            print('features:' + str(feature_seedlist))
-            
-            #预测样本的恶意与否
-            newvec_np = np.asarray([newvec_list])
-            newvec_tensor = torch.from_numpy(newvec_np)
-            t_out = DNN_model(newvec_tensor.float())
-            print('predict:' + str(np.argmax(t_out.data.numpy(), axis=1)))
+        # 变种成功的总数量
+        total_success_count = 0
+        # 变种的次数计数器
+        total_mutant_counter = 0
+        
+        with open(testpmal_vecpath, 'r') as testpmal_vecfile:
+            line = testpmal_vecfile.readline()
+            while(line):
+                sIndex_count = sIndex_count + 1
+                print('The ' + str(sIndex_count) + '\'s sample####################')
+                attack_resultfile.write('The ' + str(sIndex_count) + '\'s sample####################\n')
+                if(sIndex_count > sIndex_size):
+                    break
+                line_clips = line.split(' ')
+                mal = line_clips[0]
+                line_clips = line_clips[1:len(line_clips) - 1]
+                line_clips = list(map(int, line_clips))
+                
+                # 变种成功的数量
+                success_count = 0
+                # 变种的次数计数器
+                mutant_counter = 0
+                
+                # 预统计攻击效果
+                while(mutant_counter < mutant_times):
+                    mutant_counter = mutant_counter + 1
+                    total_mutant_counter = total_mutant_counter + 1
+                    print('Seeding--------------------------------------')
+                    attack_resultfile.write('Seeding--------------------------------------\n')
+                    print('mutant_counter:' + str(mutant_counter))
+                    attack_resultfile.write('mutant_counter:' + str(mutant_counter) + '\n')
+                    feature_seedlist = genEditFeaSeedList(mutant_size)
+                    newvec_list = changeVec(line_clips, feature_seedlist)
+                    print('features:' + str(feature_seedlist))
+                    attack_resultfile.write('features:' + str(feature_seedlist) + '\n')
+                    
+                    #预测样本的恶意与否
+                    newvec_np = np.asarray([newvec_list])
+                    newvec_tensor = torch.from_numpy(newvec_np)
+                    t_out = DNN_model(newvec_tensor.float())
+                    result_out = np.argmax(t_out.data.numpy(), axis=1)
+                    print('predict:' + str(result_out))
+                    attack_resultfile.write('predict:' + str(result_out) + '\n')
+
+                    if(result_out[0] == 0):
+                        success_count = success_count + 1
+                        total_success_count = total_success_count + 1
+                success_rate = success_count / mutant_counter
+                print('success_count:' + str(success_count) + ';mutant_counter:' + str(mutant_counter))
+                attack_resultfile.write('success_count:' + str(success_count) + ';mutant_count:' + str(mutant_counter) + '\n')
+                print('one sample\'s success_rate:' + str(success_rate))
+                attack_resultfile.write('one sample\'s success_rate:' + str(success_rate) + '\n')
+                line = testpmal_vecfile.readline()
+            total_success_rate = total_success_count / total_mutant_counter   
+            print('total_success_count:' + str(total_success_count) + ';total_mutant_counter:' + str(total_mutant_counter))
+            attack_resultfile.write('total_success_count:' + str(total_success_count) + ';total_mutant_counter:' + str(total_mutant_counter) + '\n')
+            print('samples\' total_success_rate:' + str(total_success_rate))
+            attack_resultfile.write('samples\' total_success_rate:' + str(total_success_rate) + '\n')
+
+                    
 
 
 if __name__ == '__main__':
