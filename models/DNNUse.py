@@ -110,7 +110,7 @@ class DNN(t.nn.Module):
         self.test_loader = t.utils.data.DataLoader(
             dataset=test_data,
             batch_size=1000,
-            shuffle=True) 
+            shuffle=True)
 
         self.dnn = t.nn.Sequential(
             t.nn.Linear(6096, 512),

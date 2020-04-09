@@ -14,6 +14,7 @@ class ProPath():
     
     split_id = 'split_1'
     data_dirpath = 'D:\\lisong\\Experiments1\\4_1\\'
+    #data_dirpath = 'G:\\lisong\\Experiments1\\4_1\\'
     
     # 数据集按照数量被分割成了10份，按照app名字存放的路径
     appname_dirpath = data_dirpath + '\\dataset_splits\\all\\'
@@ -40,7 +41,7 @@ class ProPath():
     
     '''项目相关路径'''
     pro_dirpath = 'D:\\lisong\\ProgramFiles\\eclipse\\workspace\\PytorchTest\\'
-    # pro_dirpath = 'D:\\lisong\\ProgramFiles\\eclipse\\workspace\\AdversarialExamAttack\\'
+    #pro_dirpath = 'E:\\Program Files\\Java\\Eclipse\\java-oxygen\\eclipse\\workspace\\PytorchTest\\'
     
     data_dict_path = pro_dirpath + 'parameters\\drebin\\data_dict.npy'
     
